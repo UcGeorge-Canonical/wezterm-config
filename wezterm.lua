@@ -21,6 +21,7 @@ local modules = {
   'modules.keys',
   'modules.mouse',
   'modules.workflow',
+  'modules.notify',
 }
 
 for _, name in ipairs(modules) do

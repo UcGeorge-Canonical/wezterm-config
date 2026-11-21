@@ -1,0 +1,130 @@
+# Starship prompt: minimal two-line (Pure-style), part of wezterm-config.
+# Loaded via STARSHIP_CONFIG from shell/init.bash.
+#
+# Colours are ANSI names on purpose: the terminal maps them to the active
+# Catppuccin palette, so the prompt follows Mocha (dark) / Latte (light).
+#
+#   ~/src/project  main !2?1⇡1  3.12 (venv) 󰔟 5s           14:03
+#   ❯
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+command_timeout = 500
+
+format = """
+$username$hostname$directory$git_branch$git_state$git_status\
+$python$golang$rust$nodejs$kubernetes${custom.juju}$cmd_duration$fill$time
+$status$character"""
+
+[fill]
+symbol = " "
+
+# user@host only over SSH (or as root).
+[username]
+# Usernames here can contain "@", so user and host get separate styling
+# instead of the ambiguous user@host form.
+format = "[$user]($style) "
+style_user = "yellow"
+style_root = "bold red"
+
+[hostname]
+ssh_only = true
+format = "[󰒋 $hostname]($style) "
+style = "yellow"
+
+[directory]
+format = "[$path]($style)[$read_only]($read_only_style) "
+style = "bold blue"
+truncation_length = 4
+truncation_symbol = "…/"
+truncate_to_repo = false
+read_only = " 󰍁"
+read_only_style = "red"
+
+[git_branch]
+format = "[$symbol$branch(:$remote_branch)]($style) "
+symbol = " "
+style = "magenta"
+
+[git_state]
+format = '[\($state( $progress_current/$progress_total)\)]($style) '
+style = "bright-black"
+
+# Counts per state: +staged !modified ?untracked ✘deleted »renamed ≡stash.
+[git_status]
+format = "([$all_status$ahead_behind]($style) )"
+style = "cyan"
+conflicted = "=${count}"
+stashed = "≡${count}"
+deleted = "✘${count}"
+renamed = "»${count}"
+modified = "!${count}"
+staged = "+${count}"
+untracked = "?${count}"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇡${ahead_count}⇣${behind_count}"
+
+[python]
+format = '[$symbol$pyenv_prefix($version )(\($virtualenv\) )]($style)'
+symbol = " "
+style = "yellow"
+
+[golang]
+format = "[$symbol($version )]($style)"
+symbol = " "
+style = "cyan"
+
+[rust]
+format = "[$symbol($version )]($style)"
+symbol = "󱘗 "
+style = "red"
+
+[nodejs]
+format = "[$symbol($version )]($style)"
+symbol = " "
+style = "green"
+
+[kubernetes]
+disabled = false
+format = '[$symbol$context( \($namespace\))]($style) '
+symbol = "󱃾 "
+style = "blue"
+
+# Juju controller:model, read straight from the client files (no juju call,
+# so it stays fast). Shown only when a Juju client config exists.
+[custom.juju]
+when = 'test -f "${JUJU_DATA:-$HOME/.local/share/juju}/controllers.yaml"'
+command = '''
+d="${JUJU_DATA:-$HOME/.local/share/juju}"
+c=$(awk '/^current-controller:/ {print $2}' "$d/controllers.yaml")
+[ -n "$c" ] || exit 0
+m=$(awk -v c="  $c:" '$0 == c {f=1; next} f && /^  [^ ]/ {f=0} f && /current-model:/ {print $2; exit}' "$d/models.yaml" 2>/dev/null)
+printf '%s%s' "$c" "${m:+:${m#*/}}"
+'''
+shell = ["bash", "--noprofile", "--norc"]
+format = "[$symbol($output )]($style)"
+symbol = "󰆧 "
+style = "green"
+
+[cmd_duration]
+min_time = 2000
+format = "[󰔟 $duration]($style) "
+style = "yellow"
+
+[time]
+disabled = false
+format = "[$time]($style)"
+time_format = "%H:%M"
+style = "bright-black"
+
+# Exit code (and signal name, e.g. SIGINT) only after a failure.
+[status]
+disabled = false
+format = "[$status( $signal_name)]($style) "
+style = "red"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold green)"

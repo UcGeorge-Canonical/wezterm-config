@@ -38,6 +38,28 @@ local function tab_title(tab)
   return pane.title
 end
 
+-- "~/src/project/sub" -> "…/project/sub": keeps the status bar compact.
+local function short_path(path)
+  path = (path or ''):gsub('/+$', '')
+  local home = wezterm.home_dir
+  if path:sub(1, #home) == home then path = '~' .. path:sub(#home + 1) end
+  local last_two = path:match('([^/]+/[^/]+)$')
+  if last_two and #path > #last_two + 2 then return '…/' .. last_two end
+  return path == '' and '/' or path
+end
+
+local function battery_segment()
+  local b = wezterm.battery_info()[1]
+  if not b then return nil end
+  local pct = math.floor(b.state_of_charge * 100 + 0.5)
+  local level = math.max(10, math.min(100, math.floor((pct + 5) / 10) * 10))
+  local charging = b.state == 'Charging' or b.state == 'Full'
+  local name = 'md_battery' .. (charging and '_charging' or '') .. (level < 100 and ('_' .. level) or '')
+  if charging and level == 100 then name = 'md_battery_charging_100' end
+  local icon = nf[name] or nf.md_battery
+  return { text = icon .. ' ' .. pct .. '%', low = pct <= 20 and not charging }
+end
+
 -- Derive tab-bar colours from the scheme so light/dark switching stays
 -- consistent. Falls back to Catppuccin Mocha values for unknown schemes.
 local function palette_for(scheme_name)
@@ -56,6 +78,7 @@ local function palette_for(scheme_name)
     active_fg = bg,
     accent = ansi[5] or '#89b4fa',
     mode = ansi[4] or '#f9e2af',
+    danger = ansi[2] or '#f38ba8',
     fg = fg,
   }
 end
@@ -105,7 +128,7 @@ function M.apply(config)
     }
   end)
 
-  wezterm.on('update-status', function(window, _)
+  wezterm.on('update-status', function(window, pane)
     local left = {}
     local mode = window:active_key_table()
     local label
@@ -129,13 +152,35 @@ function M.apply(config)
       }
     end
     window:set_left_status(wezterm.format(left))
-    window:set_right_status(wezterm.format {
-      { Background = { Color = tostring(p.bar_bg) } },
-      { Foreground = { Color = p.accent } },
-      { Text = nf.cod_layers .. ' ' .. window:active_workspace() .. '   ' },
-      { Foreground = { Color = tostring(p.tab_fg) } },
-      { Text = nf.md_clock_outline .. ' ' .. wezterm.strftime('%H:%M') .. '  ' },
-    })
+
+    local right = { { Background = { Color = tostring(p.bar_bg) } } }
+    local function seg(color, text)
+      table.insert(right, { Foreground = { Color = tostring(color) } })
+      table.insert(right, { Text = text .. '   ' })
+    end
+
+    local flash = wezterm.GLOBAL.flash
+    if flash and os.time() <= flash.until_time then
+      seg(p.mode, nf.md_check .. ' ' .. flash.text)
+    end
+
+    local cwd = pane:get_current_working_dir()
+    if cwd then
+      local host = cwd.host
+      if host and host ~= '' and host ~= 'localhost' and host ~= wezterm.hostname() then
+        seg(p.mode, nf.md_server_network .. ' ' .. host)
+      end
+      seg(p.tab_fg, nf.md_folder_outline .. ' ' .. short_path(cwd.file_path))
+    end
+
+    seg(p.accent, nf.cod_layers .. ' ' .. window:active_workspace())
+
+    local battery = battery_segment()
+    if battery then seg(battery.low and p.danger or p.tab_fg, battery.text) end
+
+    table.insert(right, { Foreground = { Color = tostring(p.tab_fg) } })
+    table.insert(right, { Text = nf.md_clock_outline .. ' ' .. wezterm.strftime('%H:%M') .. '  ' })
+    window:set_right_status(wezterm.format(right))
   end)
 end
 
