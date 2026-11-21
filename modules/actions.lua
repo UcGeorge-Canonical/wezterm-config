@@ -114,4 +114,12 @@ function M.toggle_presentation()
   return toggle_override('font_size', 18.0, 'Presentation mode')
 end
 
+-- wezterm.GLOBAL survives the reload, so the flash shows on the new config.
+function M.reload_config()
+  return wezterm.action_callback(function(window, pane)
+    M.flash('Config reloaded', 2)
+    window:perform_action(wezterm.action.ReloadConfiguration, pane)
+  end)
+end
+
 return M

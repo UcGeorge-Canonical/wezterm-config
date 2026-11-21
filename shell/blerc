@@ -1,0 +1,76 @@
+# ble.sh settings, loaded by init.bash (ble.sh --rcfile=this file).
+# ble.sh gives bash fish-style autosuggestions and syntax highlighting.
+# Reference: ~/.local/share/blesh/ or https://github.com/akinomyoga/ble.sh
+
+# --- Autosuggestions ---------------------------------------------------------
+# Grey ghost text from history (then completions). Accept: → / End / C-f;
+# accept one word: M-f or C-→. Tab still opens the completion menu.
+bleopt complete_auto_history=1
+
+# --- Markers -------------------------------------------------------------------
+# The Starship prompt already shows exit codes and durations.
+bleopt exec_errexit_mark=
+bleopt exec_elapsed_enabled=0
+bleopt exec_exit_mark=
+bleopt prompt_eol_mark=$'\e[90m⏎\e[m'
+
+# --- History search on Up/Down ----------------------------------------------
+# Type a prefix (e.g. "git") and Up/Down cycle through matching history; on an
+# empty line they behave as plain history. Enter runs the match directly.
+ble-bind -f up 'history-search-backward hide-status:point=end:empty=history-move'
+ble-bind -f down 'history-search-forward hide-status:point=end:empty=history-move'
+ble-bind -m nsearch -f C-m nsearch/accept-line
+ble-bind -m nsearch -f RET nsearch/accept-line
+
+# --- Colours -----------------------------------------------------------------
+# ble.sh defaults use fixed 256-colour shades (e.g. suggestions on a light
+# grey box). These use ANSI 0-15 instead, so they follow the terminal's
+# Catppuccin Mocha/Latte palette: 1 red 2 green 3 yellow 4 blue 5 magenta
+# 6 cyan 8 grey.
+ble-face auto_complete=fg=8
+ble-face disabled=fg=8
+ble-face region=reverse
+ble-face region_target=reverse,bold
+ble-face region_match=reverse
+ble-face region_insert=fg=4
+ble-face overwrite_mode=reverse
+ble-face vbell_erase=bg=8
+ble-face prompt_status_line=reverse
+ble-face menu_filter_input=fg=3,bold
+ble-face cmdinfo_cd_cdpath=fg=4,bold
+
+ble-face syntax_error=fg=1,underline
+ble-face argument_error=fg=1,underline
+ble-face syntax_expr=fg=4
+ble-face syntax_varname=fg=3
+ble-face syntax_param_expansion=fg=5
+ble-face syntax_history_expansion=fg=5,bold
+ble-face syntax_function_name=fg=5,bold
+ble-face syntax_comment=fg=8,italic
+ble-face syntax_glob=fg=5,bold
+ble-face syntax_brace=fg=6,bold
+ble-face syntax_tilde=fg=4,bold
+ble-face syntax_document=fg=3
+ble-face syntax_document_begin=fg=3,bold
+
+ble-face command_function=fg=5
+ble-face command_directory=fg=4,underline
+ble-face command_suffix=fg=2
+ble-face command_suffix_new=fg=1
+
+ble-face filename_directory=fg=4,underline
+ble-face filename_directory_sticky=fg=4,bold,underline
+ble-face filename_orphan=fg=1,underline
+ble-face filename_setuid=fg=3,bold,underline
+ble-face filename_setgid=fg=3,underline
+ble-face filename_character=fg=6,underline
+
+ble-face varname_unset=fg=8
+ble-face varname_empty=fg=6
+ble-face varname_number=fg=2
+ble-face varname_expr=fg=5,bold
+ble-face varname_hash=fg=2,bold
+ble-face varname_readonly=fg=5
+ble-face varname_transform=fg=6,bold
+ble-face varname_export=fg=5,bold
+ble-face varname_new=fg=2

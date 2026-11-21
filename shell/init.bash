@@ -4,10 +4,17 @@
 # Hooked from ~/.bashrc (shell/install.sh adds this line):
 #   [ -f ~/.config/wezterm/shell/init.bash ] && . ~/.config/wezterm/shell/init.bash
 # Every tool is optional: missing ones are skipped.
+# Set WCFG_NO_BLESH=1 to start a shell without ble.sh (autosuggestions).
 
 [[ $- == *i* ]] || return 0
 
 __wcfg_shell_dir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+
+# ble.sh (autosuggestions, syntax highlighting) replaces bash's line editor.
+# It is loaded first and attached last, after every other hook is in place.
+if [[ ${WCFG_NO_BLESH-} != 1 && -z ${BLE_VERSION-} && -f "$HOME/.local/share/blesh/ble.sh" ]]; then
+  . "$HOME/.local/share/blesh/ble.sh" --attach=none --rcfile="$__wcfg_shell_dir/blerc"
+fi
 
 # WezTerm shell integration (cwd tracking, prompt marks, user vars). Login
 # shells already get it from /etc/profile.d; this covers non-login shells.
@@ -31,7 +38,13 @@ if command -v fzf >/dev/null; then
     __wcfg_bat=$(command -v bat || command -v batcat)
     export FZF_CTRL_T_OPTS="--preview '$__wcfg_bat --color=always --style=numbers --line-range=:200 {} 2>/dev/null'"
   fi
-  eval "$(fzf --bash)"
+  if [[ ${BLE_VERSION-} ]]; then
+    # ble.sh replaces readline, so fzf's `bind -x` widgets need its adapters.
+    ble-import -d integration/fzf-completion
+    ble-import -d integration/fzf-key-bindings
+  else
+    eval "$(fzf --bash)"
+  fi
 fi
 
 # --- eza: ls with icons and git status ---------------------------------------
@@ -84,3 +97,7 @@ if command -v zoxide >/dev/null; then
 fi
 
 unset __wcfg_bat
+
+if [[ ${BLE_VERSION-} ]]; then
+  ble-attach
+fi

@@ -92,6 +92,8 @@ local function bindings()
     { 'View', 'Toggle translucent background', 't', nil, actions.toggle_opacity() },
     { 'View', 'Toggle presentation mode (big font)', 'P', 'SHIFT', actions.toggle_presentation() },
 
+    { 'Config', 'Reload config (also Ctrl+Shift+R)', 'R', 'SHIFT', actions.reload_config() },
+
     { 'Help', 'Search & run shortcuts', '?', 'SHIFT', nil }, -- action filled in below
     { 'Help', 'Command palette', ':', 'SHIFT', act.ActivateCommandPalette },
     { 'Help', 'Send literal CTRL+Space', 'Space', 'CTRL', act.SendKey { key = 'Space', mods = 'CTRL' }, hidden = true },
@@ -115,7 +117,6 @@ local DEFAULTS = {
   { 'View', 'Reset font size', 'Ctrl+0', act.ResetFontSize },
   { 'Output', 'Clear scrollback', 'Ctrl+Shift+K', act.ClearScrollback 'ScrollbackOnly' },
   { 'Tools', 'Emoji / character picker', 'Ctrl+Shift+U', act.CharSelect },
-  { 'Config', 'Reload config', 'Ctrl+Shift+R', act.ReloadConfiguration },
   { 'Config', 'Debug overlay (errors, Lua REPL)', 'Ctrl+Shift+L', act.ShowDebugOverlay },
 }
 

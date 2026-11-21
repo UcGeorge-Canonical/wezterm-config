@@ -62,7 +62,7 @@ end
 
 -- Derive tab-bar colours from the scheme so light/dark switching stays
 -- consistent. Falls back to Catppuccin Mocha values for unknown schemes.
-local function palette_for(scheme_name)
+local function build_palette(scheme_name)
   local scheme = wezterm.color.get_builtin_schemes()[scheme_name] or {}
   local bg = wezterm.color.parse(scheme.background or '#1e1e2e')
   local fg = scheme.foreground or '#cdd6f4'
@@ -70,7 +70,8 @@ local function palette_for(scheme_name)
   local is_dark = select(3, bg:hsla()) < 0.5
   local shift = is_dark and function(c, n) return c:lighten(n) end or function(c, n) return c:darken(n) end
   return {
-    bar_bg = (is_dark and bg:darken(0.25) or bg:darken(0.06)),
+    -- Same as the terminal background, so the bar blends into the window.
+    bar_bg = bg,
     tab_bg = shift(bg, 0.08),
     tab_hover_bg = shift(bg, 0.16),
     tab_fg = is_dark and wezterm.color.parse(fg):darken(0.15):desaturate(0.3) or wezterm.color.parse(fg):lighten(0.15),
@@ -81,6 +82,13 @@ local function palette_for(scheme_name)
     danger = ansi[2] or '#f38ba8',
     fg = fg,
   }
+end
+
+local palettes = {}
+local function palette_for(scheme_name)
+  scheme_name = scheme_name or ''
+  if not palettes[scheme_name] then palettes[scheme_name] = build_palette(scheme_name) end
+  return palettes[scheme_name]
 end
 
 function M.apply(config)
@@ -103,7 +111,11 @@ function M.apply(config)
   -- Keep handlers cheap and synchronous: they run on every repaint.
   -- Only the first registered format-tab-title handler takes effect, so do not
   -- combine this with tab-bar plugins (tabline.wez, bar.wezterm).
-  wezterm.on('format-tab-title', function(tab, _, _, _, hover, max_width)
+  -- Handlers look the palette up from the window's live scheme instead of
+  -- capturing `p`: on Wayland the first config evaluation can run before the
+  -- dark/light setting is known, and the tabs then kept the wrong palette.
+  wezterm.on('format-tab-title', function(tab, _, _, conf, hover, max_width)
+    local p = palette_for(conf and conf.color_scheme)
     local bg, fg = p.tab_bg, p.tab_fg
     if tab.is_active then
       bg, fg = p.active_bg, p.active_fg
@@ -129,6 +141,7 @@ function M.apply(config)
   end)
 
   wezterm.on('update-status', function(window, pane)
+    local p = palette_for(window:effective_config().color_scheme)
     local left = {}
     local mode = window:active_key_table()
     local label

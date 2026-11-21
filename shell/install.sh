@@ -2,6 +2,8 @@
 # One-time shell setup for this WezTerm config. Safe to re-run.
 #   - hooks shell/init.bash into ~/.bashrc (with a timestamped backup)
 #   - installs the Catppuccin themes for bat
+#   - installs ble.sh (autosuggestions) into ~/.local/share/blesh
+#     (pass --update-blesh to refresh it)
 # Tools come from apt:  sudo apt install starship zoxide eza bat fzf
 # Font: FiraCode Nerd Font (https://github.com/ryanoasis/nerd-fonts/releases).
 set -euo pipefail
@@ -31,6 +33,18 @@ if [ -n "$bat" ]; then
   echo "Installed Catppuccin themes for bat"
 else
   echo "bat not installed; skipping themes"
+fi
+
+blesh="$HOME/.local/share/blesh"
+if [ ! -f "$blesh/ble.sh" ] || [ "${1-}" = --update-blesh ]; then
+  # Nightly is the build upstream recommends; releases lag behind bash 5.3.
+  tmp=$(mktemp -d)
+  curl -fsSL https://github.com/akinomyoga/ble.sh/releases/download/nightly/ble-nightly.tar.xz | tar xJf - -C "$tmp"
+  bash "$tmp/ble-nightly/ble.sh" --install "$HOME/.local/share" >/dev/null
+  rm -rf "$tmp"
+  echo "Installed ble.sh into $blesh"
+else
+  echo "ble.sh already installed (re-run with --update-blesh to refresh)"
 fi
 
 missing=()

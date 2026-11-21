@@ -36,6 +36,7 @@ Selection & tools
   Space           Quick select (URLs, hashes, paths) and copy
   y               Copy the last command's output
   e               Open scrollback in $EDITOR (or less)
+  R               Reload config (same as CTRL+SHIFT+R; saving a file also reloads)
   :               Command palette
   ?               Searchable shortcut menu (runs the picked action)
 
@@ -79,6 +80,10 @@ View
 
 ## Shell (shell/init.bash)
 
+  →  /  End / CTRL+F        Accept the grey autosuggestion (ble.sh)
+  ALT+F / CTRL+→            Accept one word of it
+  Up / Down                 History matching what you've typed (plain history if empty)
+  Tab                       Completion menu (arrows / Tab to move, Enter to pick)
   CTRL+R                    Fuzzy history search (fzf)
   CTRL+T                    Fuzzy-insert a file path (with bat preview)
   ALT+C                     Fuzzy cd into a subdirectory (with tree preview)
