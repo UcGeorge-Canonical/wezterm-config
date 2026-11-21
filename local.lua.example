@@ -1,0 +1,6 @@
+-- Per-machine overrides. Copy to ~/.config/wezterm/local.lua (keep it out of
+-- shared dotfiles). Runs after all modules, so anything here wins.
+return function(config)
+  -- config.font_size = 13
+  -- config.front_end = 'WebGpu'
+end
