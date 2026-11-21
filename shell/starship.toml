@@ -9,7 +9,8 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 add_newline = true
-command_timeout = 500
+# Snap-packaged tools (go, node, ...) can take >500ms on a cold start.
+command_timeout = 1000
 
 format = """
 $username$hostname$directory$git_branch$git_state$git_status\
