@@ -4,8 +4,7 @@ A polished, batteries-included [WezTerm](https://wezterm.org) setup for Linux
 (built on Ubuntu / GNOME, Wayland). It also sets up the bash prompt and shell
 tools, so the terminal and the shell look and behave as one thing.
 
-- **Looks:** Catppuccin Mocha / Latte, switching automatically with the system
-  dark/light setting. FiraCode Nerd Font with ligatures. Rounded "pill" tabs on
+- **Looks:** Ayu Mirage everywhere (terminal, prompt, fzf, bat, autosuggestions). FiraCode Nerd Font with ligatures. Rounded "pill" tabs on
   a tab bar that blends into the window.
 - **Feels like tmux:** a `CTRL+Space` leader for panes, tabs and workspaces,
   plus a **searchable shortcut menu** (`CTRL+Space ?`) so you never have to
@@ -94,8 +93,12 @@ If `~/.wezterm.lua` exists, it takes priority over this config. Rename it.
 
 - **Per-machine tweaks:** copy `local.lua.example` to `local.lua` (git-ignored).
   It runs last, so anything set there wins.
-- **Theme:** `M.dark_scheme` / `M.light_scheme` in `modules/appearance.lua`.
-  The tab bar, prompt, fzf, bat and ble.sh all follow it automatically.
+- **Theme:** `M.dark_scheme` / `M.light_scheme` in `modules/appearance.lua`
+  (both are Ayu Mirage, so it stays dark; set a light scheme to follow GNOME).
+  The tab bar, prompt, fzf and ble.sh follow it automatically. bat uses
+  `shell/bat/ayu-mirage.tmTheme` (from
+  [mathiasdonoso/ayu-bat](https://github.com/mathiasdonoso/ayu-bat), MIT).
+  Replace it and update `BAT_THEME` in `shell/init.bash` if you change the theme.
 - **Font, size, ligatures:** `modules/appearance.lua` (`harfbuzz_features`).
 - **Keys:** `modules/keys.lua`. A single table drives both the bindings and the
   `CTRL+Space ?` menu, so new keys show up in the menu automatically.
@@ -121,6 +124,7 @@ If `~/.wezterm.lua` exists, it takes priority over this config. Rename it.
 | `shell/starship.toml` | Prompt |
 | `shell/blerc` | ble.sh settings (suggestions, colours, Up/Down search) |
 | `shell/install.sh` | One-time shell setup |
+| `shell/bat/` | bat syntax theme matching the terminal |
 | `SHORTCUTS.md` | Every shortcut |
 
 ## Troubleshooting

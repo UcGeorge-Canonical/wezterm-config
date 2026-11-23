@@ -61,7 +61,7 @@ local function battery_segment()
 end
 
 -- Derive tab-bar colours from the scheme so light/dark switching stays
--- consistent. Falls back to Catppuccin Mocha values for unknown schemes.
+-- consistent. Falls back to fixed dark values for unknown schemes.
 local function build_palette(scheme_name)
   local scheme = wezterm.color.get_builtin_schemes()[scheme_name] or {}
   local bg = wezterm.color.parse(scheme.background or '#1e1e2e')

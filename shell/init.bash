@@ -1,5 +1,5 @@
 # Interactive bash setup that pairs with the WezTerm config: Starship prompt,
-# fzf, zoxide, eza and bat, all coloured by the terminal's Catppuccin palette.
+# fzf, zoxide, eza and bat, all coloured to match the terminal theme (Ayu Mirage).
 #
 # Hooked from ~/.bashrc (shell/install.sh adds this line):
 #   [ -f ~/.config/wezterm/shell/init.bash ] && . ~/.config/wezterm/shell/init.bash
@@ -60,9 +60,9 @@ if command -v batcat >/dev/null && ! command -v bat >/dev/null; then
   alias bat='batcat'
 fi
 if command -v bat >/dev/null || command -v batcat >/dev/null; then
-  # bat picks the dark/light theme from the terminal's background colour.
-  if [[ -f "$HOME/.config/bat/themes/Catppuccin Mocha.tmTheme" ]]; then
-    export BAT_THEME_DARK='Catppuccin Mocha' BAT_THEME_LIGHT='Catppuccin Latte'
+  # Installed by shell/install.sh from shell/bat/.
+  if [[ -f "$HOME/.config/bat/themes/ayu-mirage.tmTheme" ]]; then
+    export BAT_THEME='ayu-mirage'
   fi
   alias cat='bat --paging=never --style=plain'
 fi

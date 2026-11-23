@@ -2,7 +2,7 @@
 # Loaded via STARSHIP_CONFIG from shell/init.bash.
 #
 # Colours are ANSI names on purpose: the terminal maps them to the active
-# Catppuccin palette, so the prompt follows Mocha (dark) / Latte (light).
+# colour scheme, so the prompt follows whatever theme WezTerm uses.
 #
 #   ~/src/project  main !2?1⇡1  3.12 (venv) 󰔟 5s           14:03
 #   ❯

@@ -6,8 +6,10 @@ local M = {}
 
 -- Pick scheme names with scripts/list-schemes.sh; an invalid name silently
 -- falls back to the default palette (it is not a config error).
-M.dark_scheme = 'Catppuccin Mocha'
-M.light_scheme = 'Catppuccin Latte'
+-- Both point at Ayu Mirage to stay dark regardless of the GNOME setting; set
+-- a light scheme here (e.g. 'ayu_light') to follow the system again.
+M.dark_scheme = 'Ayu Mirage'
+M.light_scheme = 'Ayu Mirage'
 
 local function system_appearance()
   -- wezterm.gui is nil inside wezterm-mux-server; default to dark there.

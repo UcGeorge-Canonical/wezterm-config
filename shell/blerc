@@ -25,7 +25,7 @@ ble-bind -m nsearch -f RET nsearch/accept-line
 # --- Colours -----------------------------------------------------------------
 # ble.sh defaults use fixed 256-colour shades (e.g. suggestions on a light
 # grey box). These use ANSI 0-15 instead, so they follow the terminal's
-# Catppuccin Mocha/Latte palette: 1 red 2 green 3 yellow 4 blue 5 magenta
+# active colour scheme: 1 red 2 green 3 yellow 4 blue 5 magenta
 # 6 cyan 8 grey.
 ble-face auto_complete=fg=8
 ble-face disabled=fg=8

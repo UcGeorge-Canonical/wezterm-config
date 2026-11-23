@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # One-time shell setup for this WezTerm config. Safe to re-run.
 #   - hooks shell/init.bash into ~/.bashrc (with a timestamped backup)
-#   - installs the Catppuccin themes for bat
+#   - installs the Ayu Mirage theme for bat (shell/bat/)
 #   - installs ble.sh (autosuggestions) into ~/.local/share/blesh
 #     (pass --update-blesh to refresh it)
 # Tools come from apt:  sudo apt install starship zoxide eza bat fzf
@@ -25,12 +25,9 @@ bat=$(command -v bat || command -v batcat || true)
 if [ -n "$bat" ]; then
   themes="$("$bat" --config-dir)/themes"
   mkdir -p "$themes"
-  for flavour in Mocha Latte; do
-    curl -fsSL -o "$themes/Catppuccin $flavour.tmTheme" \
-      "https://raw.githubusercontent.com/catppuccin/bat/main/themes/Catppuccin%20$flavour.tmTheme"
-  done
+  cp "$dir"/bat/*.tmTheme "$themes"/
   "$bat" cache --build >/dev/null
-  echo "Installed Catppuccin themes for bat"
+  echo "Installed bat theme (Ayu Mirage)"
 else
   echo "bat not installed; skipping themes"
 fi
