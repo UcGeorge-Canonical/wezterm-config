@@ -44,7 +44,8 @@ full list is in [SHORTCUTS.md](SHORTCUTS.md).
 | Feature | How |
 |---|---|
 | Autosuggestions from history as you type | `→` / `End` accepts, `ALT+F` accepts one word |
-| Prefix history search: type `git` and cycle through only git commands | `↑ / ↓` |
+| History on `↑ / ↓` (cursor at the end, ready to edit); type a prefix like `git` to cycle through only git commands | `↑ / ↓` |
+| History saved after every command, so new tabs/panes see commands from ones still open | automatic |
 | Syntax highlighting (unknown commands are underlined red) | automatic |
 | Fuzzy history / file / directory pickers (fzf) | `CTRL+R` / `CTRL+T` / `ALT+C` |
 | Jump to frequently used directories | `z proj`, `zi` (interactive) |

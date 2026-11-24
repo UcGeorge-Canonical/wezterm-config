@@ -40,10 +40,6 @@ Selection & tools
   :               Command palette
   ?               Searchable shortcut menu (runs the picked action)
 
-Shell
-  b               Edit ~/.bashrc in neovim (new tab)
-  B               Source ~/.bashrc in the current pane (needs an idle shell prompt)
-
 View
   t               Toggle translucent background
   P               Toggle presentation mode (big font)
@@ -86,7 +82,8 @@ View
 
   →  /  End / CTRL+F        Accept the grey autosuggestion (ble.sh)
   ALT+F / CTRL+→            Accept one word of it
-  Up / Down                 History matching what you've typed (plain history if empty)
+  Up / Down                 History matching what you've typed (plain history if empty);
+                            cursor lands at the end, Enter runs it, any other key edits it
   Tab                       Completion menu (arrows / Tab to move, Enter to pick)
   CTRL+R                    Fuzzy history search (fzf)
   CTRL+T                    Fuzzy-insert a file path (with bat preview)

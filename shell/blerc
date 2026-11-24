@@ -14,11 +14,16 @@ bleopt exec_elapsed_enabled=0
 bleopt exec_exit_mark=
 bleopt prompt_eol_mark=$'\e[90m⏎\e[m'
 
-# --- History search on Up/Down ----------------------------------------------
-# Type a prefix (e.g. "git") and Up/Down cycle through matching history; on an
-# empty line they behave as plain history. Enter runs the match directly.
-ble-bind -f up 'history-search-backward hide-status:point=end:empty=history-move'
-ble-bind -f down 'history-search-forward hide-status:point=end:empty=history-move'
+# --- History on Up/Down -------------------------------------------------------
+# Empty line: Up/Down walk through all history. Typed prefix (e.g. "git"):
+# they walk through only commands starting with it. The cursor always lands at
+# the end of the line so you can edit straight away; any other key leaves the
+# search, and Enter runs the shown command.
+# (Not `empty=history-move`: ble.sh hard-codes the cursor to column 0 there,
+# and a second Up would then search for the whole recalled line.)
+bleopt history_default_point=end
+ble-bind -f up 'history-search-backward hide-status:point=end:empty=hide-status'
+ble-bind -f down 'history-search-forward hide-status:point=end:empty=hide-status'
 ble-bind -m nsearch -f C-m nsearch/accept-line
 ble-bind -m nsearch -f RET nsearch/accept-line
 

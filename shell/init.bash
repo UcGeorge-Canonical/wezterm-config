@@ -16,6 +16,23 @@ if [[ ${WCFG_NO_BLESH-} != 1 && -z ${BLE_VERSION-} && -f "$HOME/.local/share/ble
   . "$HOME/.local/share/blesh/ble.sh" --attach=none --rcfile="$__wcfg_shell_dir/blerc"
 fi
 
+# --- History -------------------------------------------------------------------
+# Bash only writes history when a shell exits, so new tabs/panes missed
+# everything typed in the ones still open. Save each command as it runs
+# instead. Up/Down still show this shell's own commands first; new shells
+# (and fzf's CTRL+R there) see all of them.
+HISTSIZE=100000
+HISTFILESIZE=100000
+HISTCONTROL=ignoreboth:erasedups
+shopt -s histappend cmdhist
+__wcfg_history_save() {
+  local status=$?
+  history -a
+  return "$status" # keep $? for the prompt's exit-code display
+}
+[[ ${PROMPT_COMMAND-} == *__wcfg_history_save* ]] \
+  || PROMPT_COMMAND="__wcfg_history_save${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+
 # WezTerm shell integration (cwd tracking, prompt marks, user vars). Login
 # shells already get it from /etc/profile.d; this covers non-login shells.
 # The function check prevents installing the hooks twice.
