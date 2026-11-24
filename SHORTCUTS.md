@@ -40,6 +40,10 @@ Selection & tools
   :               Command palette
   ?               Searchable shortcut menu (runs the picked action)
 
+Shell
+  b               Edit ~/.bashrc in neovim (new tab)
+  B               Source ~/.bashrc in the current pane (needs an idle shell prompt)
+
 View
   t               Toggle translucent background
   P               Toggle presentation mode (big font)

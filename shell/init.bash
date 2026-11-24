@@ -67,6 +67,12 @@ if command -v bat >/dev/null || command -v batcat >/dev/null; then
   alias cat='bat --paging=never --style=plain'
 fi
 
+# --- Neovim as the default editor (git commit, crontab -e, sudoedit, ...) ----
+if command -v nvim >/dev/null; then
+  export EDITOR=nvim VISUAL=nvim
+  export MANPAGER='nvim +Man!' # man pages with highlighting, links and search
+fi
+
 # --- Starship prompt -----------------------------------------------------------
 if command -v starship >/dev/null; then
   export STARSHIP_CONFIG="$__wcfg_shell_dir/starship.toml"

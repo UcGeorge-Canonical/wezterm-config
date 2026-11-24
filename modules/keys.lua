@@ -92,6 +92,14 @@ local function bindings()
     { 'View', 'Toggle translucent background', 't', nil, actions.toggle_opacity() },
     { 'View', 'Toggle presentation mode (big font)', 'P', 'SHIFT', actions.toggle_presentation() },
 
+    { 'Shell', 'Edit ~/.bashrc in neovim (new tab)', 'b', nil, act.SpawnCommandInNewTab {
+      domain = 'DefaultDomain',
+      args = { 'nvim', wezterm.home_dir .. '/.bashrc' },
+    } },
+    -- Typed into the focused pane: sourcing only affects the shell that runs it,
+    -- so this needs an idle shell prompt (not a running program like nvim).
+    { 'Shell', 'Source ~/.bashrc in this shell', 'B', 'SHIFT', act.SendString 'source ~/.bashrc\n' },
+
     { 'Config', 'Reload config (also Ctrl+Shift+R)', 'R', 'SHIFT', actions.reload_config() },
 
     { 'Help', 'Search & run shortcuts', '?', 'SHIFT', nil }, -- action filled in below

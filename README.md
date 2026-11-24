@@ -50,6 +50,7 @@ full list is in [SHORTCUTS.md](SHORTCUTS.md).
 | Jump to frequently used directories | `z proj`, `zi` (interactive) |
 | `ls` with icons and git status | `ls`, `ll`, `la`, `lt` (tree) |
 | Syntax-highlighted file viewer | `bat file`, and `cat` uses bat too |
+| Neovim as `$EDITOR`/`$VISUAL` (git commits etc.) and `man` pager, if installed | automatic |
 | Prompt: directory, git status, Python/Go/Rust/Node version, k8s/juju context, command duration, exit code, time; user and host shown over SSH | automatic |
 
 ## Prerequisites
